@@ -2,7 +2,10 @@ package com.wuli.flabbergast;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -26,8 +29,12 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 4; i++) {
             TableRow tableRow = new TableRow(this);
             tableLayout.addView(tableRow);
+            tableRow.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1));
+            tableRow.setGravity(Gravity.CENTER);
             for (int j = 0; j < 4; j++) {
                 TextView textView = new TextView(this);
+                textView.setGravity(Gravity.CENTER);
+                textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 50);
                 tableRow.addView(textView);
                 textViewsInGrid.add(textView);
             }
