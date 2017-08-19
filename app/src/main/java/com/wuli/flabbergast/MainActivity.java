@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
                 TextView textView = new TextView(this);
                 textView.setGravity(Gravity.CENTER);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 50);
+                textView.setBackgroundResource(R.drawable.dice_background);
                 tableRow.addView(textView);
                 textViewsInGrid.add(textView);
             }

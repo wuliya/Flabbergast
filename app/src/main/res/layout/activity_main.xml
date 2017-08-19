@@ -22,8 +22,11 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:elevation="0dp"
         android:onClick="refreshGrid"
         android:text="Refresh"
         app:layout_constraintTop_toBottomOf="@+id/tableLayout"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
 </android.support.constraint.ConstraintLayout>
