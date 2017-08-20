@@ -1,5 +1,7 @@
 package com.wuli.flabbergast;
 
+import android.media.AudioManager;
+import android.media.ToneGenerator;
 import android.os.CountDownTimer;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -67,17 +69,29 @@ public class MainActivity extends AppCompatActivity {
         if (timer != null) {
             timer.cancel();
         }
-        timer = new CountDownTimer(1000 * 5, 100) {
+        timer = new CountDownTimer(1000 * 60 * 3, 100) {
+
+            boolean warningBeepSent = false;
 
             public void onTick(long millisUntilFinished) {
                 // Add 999ms to make countdown timer smoother from the start, also avoids timer
                 // going to 0:00 before "Pens down"
                 textView.setText(MINUTES_SECONDS.format(new Date(millisUntilFinished + 999)));
 
+                if (millisUntilFinished < 1000 * 30 && !warningBeepSent) {
+                    ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+                    toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
+                    warningBeepSent = true;
+                }
+
             }
 
             public void onFinish() {
                 textView.setText("Pens down!");
+
+                ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+                toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD);
+
             }
         };
         timer.start();
