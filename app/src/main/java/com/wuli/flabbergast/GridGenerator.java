@@ -32,11 +32,11 @@ public class GridGenerator {
 
     };
 
-    public static List<String> generateGrid() {
+    public static ArrayList<String> generateGrid() {
         List<String[]> listOfDice = Arrays.asList(DICE);
         Collections.shuffle(listOfDice);
 
-        List<String> grid = new ArrayList<>();
+        ArrayList<String> grid = new ArrayList<>();
         for (String[] die : listOfDice) {
             Random randomizer = new Random();
             String random = die[randomizer.nextInt(6)];

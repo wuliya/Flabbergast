@@ -3,7 +3,6 @@ package com.wuli.flabbergast;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.CountDownTimer;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -24,7 +23,9 @@ public class MainActivity extends AppCompatActivity {
     public static final SimpleDateFormat MINUTES_SECONDS = new SimpleDateFormat("m:ss");
 
     private List<TextView> textViewsInGrid;
+    private ArrayList<String> gridLetters;
     private CountDownTimer timer;
+    private long millisLeft;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,30 +51,42 @@ public class MainActivity extends AppCompatActivity {
                 textViewsInGrid.add(textView);
             }
         }
-        refreshGrid();
+
+        if (savedInstanceState != null) {
+            gridLetters = savedInstanceState.getStringArrayList("grid");
+            millisLeft = savedInstanceState.getLong("timer");
+            fillInGridAndTimer();
+        } else {
+            createNewGrid();
+        }
     }
 
     public void refreshGrid(View view) {
-        refreshGrid();
-
+        createNewGrid();
     }
 
-    private void refreshGrid() {
-        List<String> grid = GridGenerator.generateGrid();
-        for (int i = 0; i < 16; i++) {
-            textViewsInGrid.get(i).setText(grid.get(i));
+    private void createNewGrid() {
+        gridLetters = GridGenerator.generateGrid();
+        millisLeft = 1000 * 60 * 3;
 
+        fillInGridAndTimer();
+    }
+
+    private void fillInGridAndTimer() {
+        for (int i = 0; i < 16; i++) {
+            textViewsInGrid.get(i).setText(gridLetters.get(i));
         }
 
         final TextView textView = (TextView) findViewById(R.id.countdown_timer);
         if (timer != null) {
             timer.cancel();
         }
-        timer = new CountDownTimer(1000 * 60 * 3, 100) {
+        timer = new CountDownTimer(millisLeft, 100) {
 
             boolean warningBeepSent = false;
 
             public void onTick(long millisUntilFinished) {
+                millisLeft = millisUntilFinished;
                 // Add 999ms to make countdown timer smoother from the start, also avoids timer
                 // going to 0:00 before "Pens down"
                 textView.setText(MINUTES_SECONDS.format(new Date(millisUntilFinished + 999)));
@@ -95,6 +108,18 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         timer.start();
+    }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putStringArrayList("grid", gridLetters);
+        outState.putLong("timer", millisLeft);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        timer.cancel();
     }
 }
