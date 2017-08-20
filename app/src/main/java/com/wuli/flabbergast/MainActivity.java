@@ -1,6 +1,7 @@
 package com.wuli.flabbergast;
 
 import android.os.CountDownTimer;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -35,10 +36,11 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 4; i++) {
             TableRow tableRow = new TableRow(this);
             tableLayout.addView(tableRow);
-            tableRow.setLayoutParams(new TableRow.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1));
+            tableRow.setLayoutParams(new TableLayout.LayoutParams(0, 0, 10));
             tableRow.setGravity(Gravity.CENTER);
             for (int j = 0; j < 4; j++) {
                 TextView textView = new TextView(this);
+                textView.setLayoutParams(new TableRow.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT));
                 textView.setGravity(Gravity.CENTER);
                 textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 50);
                 textView.setBackgroundResource(R.drawable.dice_background);
