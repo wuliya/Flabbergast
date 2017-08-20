@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> gridLetters;
     private CountDownTimer timer;
     private long millisLeft;
+    boolean warningBeepSent = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             gridLetters = savedInstanceState.getStringArrayList("grid");
             millisLeft = savedInstanceState.getLong("timer");
+            warningBeepSent = savedInstanceState.getBoolean("warningBeepSent");
             fillInGridAndTimer();
         } else {
             createNewGrid();
@@ -68,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private void createNewGrid() {
         gridLetters = GridGenerator.generateGrid();
         millisLeft = 1000 * 60 * 3;
+        warningBeepSent = false;
 
         fillInGridAndTimer();
     }
@@ -81,33 +86,39 @@ public class MainActivity extends AppCompatActivity {
         if (timer != null) {
             timer.cancel();
         }
-        timer = new CountDownTimer(millisLeft, 100) {
+        if (millisLeft == 0) {
 
-            boolean warningBeepSent = false;
+            textView.setText("Pens down!");
 
-            public void onTick(long millisUntilFinished) {
-                millisLeft = millisUntilFinished;
-                // Add 999ms to make countdown timer smoother from the start, also avoids timer
-                // going to 0:00 before "Pens down"
-                textView.setText(MINUTES_SECONDS.format(new Date(millisUntilFinished + 999)));
+        } else {
+            timer = new CountDownTimer(millisLeft, 100) {
 
-                if (millisUntilFinished < 1000 * 30 && !warningBeepSent) {
-                    ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
-                    toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
-                    warningBeepSent = true;
+
+                public void onTick(long millisUntilFinished) {
+                    millisLeft = millisUntilFinished;
+                    // Add 999ms to make countdown timer smoother from the start, also avoids timer
+                    // going to 0:00 before "Pens down"
+                    textView.setText(MINUTES_SECONDS.format(new Date(millisUntilFinished + 999)));
+
+                    if (millisUntilFinished < 1000 * 30 && !warningBeepSent) {
+                        ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+                        toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD, 200);
+                        warningBeepSent = true;
+                    }
+
                 }
 
-            }
+                public void onFinish() {
+                    millisLeft = 0;
+                    textView.setText("Pens down!");
 
-            public void onFinish() {
-                textView.setText("Pens down!");
+                    ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
+                    toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD);
 
-                ToneGenerator toneG = new ToneGenerator(AudioManager.STREAM_ALARM, 100);
-                toneG.startTone(ToneGenerator.TONE_CDMA_ALERT_CALL_GUARD);
-
-            }
-        };
-        timer.start();
+                }
+            };
+            timer.start();
+        }
     }
 
     @Override
@@ -115,11 +126,15 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putStringArrayList("grid", gridLetters);
         outState.putLong("timer", millisLeft);
+        outState.putBoolean("warningBeepSent", warningBeepSent);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        timer.cancel();
+
+        if (timer != null) {
+            timer.cancel();
+        }
     }
 }
