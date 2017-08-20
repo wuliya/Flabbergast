@@ -1,5 +1,6 @@
 package com.wuli.flabbergast;
 
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -10,12 +11,17 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final SimpleDateFormat MINUTES_SECONDS = new SimpleDateFormat("m:ss");
+
     private List<TextView> textViewsInGrid;
+    private CountDownTimer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,5 +60,23 @@ public class MainActivity extends AppCompatActivity {
             textViewsInGrid.get(i).setText(grid.get(i));
 
         }
+
+        final TextView textView = (TextView) findViewById(R.id.countdown_timer);
+        if (timer != null) {
+            timer.cancel();
+        }
+        timer = new CountDownTimer(1000 * 5, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                textView.setText(MINUTES_SECONDS.format(new Date(millisUntilFinished)));
+
+            }
+
+            public void onFinish() {
+                textView.setText("Pens down!");
+            }
+        };
+        timer.start();
+
     }
 }
