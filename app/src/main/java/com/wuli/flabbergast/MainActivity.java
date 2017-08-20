@@ -67,10 +67,12 @@ public class MainActivity extends AppCompatActivity {
         if (timer != null) {
             timer.cancel();
         }
-        timer = new CountDownTimer(1000 * 5, 1000) {
+        timer = new CountDownTimer(1000 * 5, 100) {
 
             public void onTick(long millisUntilFinished) {
-                textView.setText(MINUTES_SECONDS.format(new Date(millisUntilFinished)));
+                // Add 999ms to make countdown timer smoother from the start, also avoids timer
+                // going to 0:00 before "Pens down"
+                textView.setText(MINUTES_SECONDS.format(new Date(millisUntilFinished + 999)));
 
             }
 

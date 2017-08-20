@@ -22,28 +22,29 @@
 
     </TableLayout>
 
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:onClick="refreshGrid"
-        android:text="Refresh"
-        app:layout_constraintTop_toBottomOf="@+id/tableLayout"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
-
     <TextView
         android:id="@+id/countdown_timer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="16dp"
-        android:text="TextView"
+        android:layout_marginTop="8dp"
+        android:text="4:59"
         android:textSize="60sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:onClick="refreshGrid"
+        android:text="Refresh"
+        app:layout_constraintTop_toBottomOf="@+id/countdown_timer"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+
 </android.support.constraint.ConstraintLayout>
