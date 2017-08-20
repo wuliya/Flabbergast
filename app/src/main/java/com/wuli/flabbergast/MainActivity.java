@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 4; i++) {
             TableRow tableRow = new TableRow(this);
             tableLayout.addView(tableRow);
-            tableRow.setLayoutParams(new TableLayout.LayoutParams(0, 0, 10));
+            tableRow.setLayoutParams(new TableLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT, 10));
             tableRow.setGravity(Gravity.CENTER);
             for (int j = 0; j < 4; j++) {
                 TextView textView = new TextView(this);
